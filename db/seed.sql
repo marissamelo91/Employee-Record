@@ -1,10 +1,10 @@
 INSERT INTO department (name)
-VALUES ('Aersospace Engineer'),
-       ('Accountant'),
-       ('Project Lead'),
-       ('Machinist'),
+VALUES ('Engineer'),
+       ('Finance'),
+       ('Planning Office'),
+       ('Fabricator'),
        ('Quality'),
-       ('Estimator'),
+       ('Project Management'),
        ('IT');
 
 INSERT into role (title, salary, department_id)  
