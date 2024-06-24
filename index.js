@@ -3,8 +3,10 @@ const { type } = require("os");
 const { Pool } = require("pg");
 let pool = null
 
+//Array of options
 const options = ["view all departments", "view all roles", "view all employees", "add a department", "add a role", "add an employee", "update an employee role", "exit"];
 
+//asynchronous function menu that uses the inquirer library to prompt the user to select an option from a list. 
 const menu = async () => {
     const res = await inquirer.prompt([
         {
@@ -18,6 +20,7 @@ const menu = async () => {
     return res.option;
 }
 
+//Asynchronous function psqlAccount that uses the inquirer library to prompt the user to enter their PostgreSQL username and password. The function returns an object with the username and password properties
 const psqlAccount = async () => {
     const res = await inquirer.prompt([
         {
@@ -32,6 +35,7 @@ const psqlAccount = async () => {
         },
     ]);
 
+    //Creates a new instance of a Pool class, passing an object with connection settings to the PostgreSQL database. The user and password properties are set using the values from the res object, which is assumed to be the result of the psqlAccount function.
     pool = new Pool(
         {
             user: `${res.username}`,
@@ -41,6 +45,7 @@ const psqlAccount = async () => {
 
         }
     );
+    //Connects to the PostgreSQL database using the pool instance. If the connection is successful, message prompts message below and returns true. If an error occurs, it logs an error message and returns false.
     try {
         await pool.connect();
         console.log("Connected to PostgreSQL database");
@@ -51,11 +56,17 @@ const psqlAccount = async () => {
     }
 
 }
+//Initializes the application and returns a promise 
 const init = async () => {
+    //Calls the psqlAccount function then waits for the promise returned by psqlAccount
     let running = await psqlAccount();
+    //while loop
     while (running) {
+        // displays a menu to the user and returns the user's selection as a promise
         const option = await menu();
+        //If true, the code inside the if statement will be executed.
         if (option === "view all departments") {
+            //Retrieve a list of department names from Postgres SQL
             const { rows } = await pool.query("SELECT department.name FROM department");
             console.table(rows);
         }

@@ -32,7 +32,7 @@ WHEN I choose to update an employee role<br>
 THEN I am prompted to select an employee to update and their new role and this information is updated in the database<br>
 
 ## Usuage
-In order to run the program you must download the following.
+In order to run the program you must download the following.<br>
 Node.js <br>
 PostgreSQL <br>
 
@@ -42,6 +42,11 @@ PostgreSQL <br>
 3. Create a PostgreSQL database and update the `index.js` file with your database credentials.
 4. Run `node index` to start the application.
 5. Follow the prompts to interact with the application.
+
+## Credits
+Class Lectures<br>
+Youtube<br>
+Classmates - Thinh Nguyen and Faiza Haque<br>
 
 ## Questions
 If you have any questions or need further clarification, please don't hesitate to reach out to me at
