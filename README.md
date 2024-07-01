@@ -39,8 +39,9 @@ Node.js and PostgreSQL.
 5. Follow the prompts to interact with the application.
 
 ## Video Walkthrough
+https://screenrec.com/share/HUur5mWZsB
 
-## Screenshot
+## Screenshots
 ![Screenshot](./assets/Department_Table.png)
 ![Screenshot](./assets/Employee_Table.png)
 
