@@ -45,7 +45,9 @@ const psqlAccount = async () => {
 
         }
     );
-    //Connects to the PostgreSQL database using the pool instance. If the connection is successful, message prompts message below and returns true. If an error occurs, it logs an error message and returns false.
+    //Connects to the PostgreSQL database using the pool instance. 
+    //If the connection is successful, message prompts message below and returns true. 
+    //If an error occurs, it logs an error message and returns false.
     try {
         await pool.connect();
         console.log("Connected to PostgreSQL database");
@@ -71,26 +73,37 @@ const init = async () => {
             console.table(rows);
         }
         else if (option === "view all roles") {
+            //Retrieve a list of roles from Postgres SQL
             const { rows } = await pool.query("SELECT role.title, role.salary, department.name FROM role JOIN department ON role.department_id = department.id");
             console.table(rows);
         }
         else if (option === "view all employees") {
+            //Retrieve a list of employees from Postgres SQL
             const { rows } = await pool.query("SELECT e.first_name, e.last_name, r.title, r.salary, d.name AS department, COALESCE(m.first_name || ' ' || m.last_name, 'NULL') AS manager FROM employee e JOIN role r ON e.role_id = r.id JOIN department d ON r.department_id = d.id LEFT JOIN employee m ON e.manager_id = m.id");
             console.table(rows);
         }
         else if (option === "add a department") {
+            //Allows user to enter a new department
             const res = await inquirer.prompt([
                 {
                     type: "input",
                     name: "department",
                     message: "Enter the department name",
                     validate: async (input) => {
-                        return input.length <= 30;
+                        if (input.trim().length > 30) {
+                            console.log("Department name should not exceed 30 characters");
+                            return false;
+                            // Validate that the input length is 30 characters or less
+                        }
+                        return true;
                     }
                 }]);
 
             const values = [res.department];
+            //Executes an SQL 'insert' query using the 'pool' object. Query inserts a new row into the department table.
+            //The RETURNING * clause tells the database to return the inserted row(s) after the insertion completes.
             const newData = await pool.query('INSERT INTO department (name) VALUES ($1) RETURNING *', values);
+            //logs a message to the console, indicating that the department with the specified name has been successfully added to the database.
             console.log(`${newData.rows[0].name} is added`)
         }
 
@@ -102,7 +115,12 @@ const init = async () => {
                     name: "title",
                     message: "Enter the role title",
                     validate: async (input) => {
-                        return input.length <= 30;
+                        if (input.trim().length > 30) {
+                            console.log("Role Title should not exceed 30 characters")
+                            return false;
+                            // Validate that the input length is 30 characters or less
+                        }
+                        return true;
                     }
                 },
                 {
@@ -110,7 +128,11 @@ const init = async () => {
                     name: "salary",
                     message: "Enter the role salary",
                     validate: async (input) => {
-                        return !isNaN(parseFloat(input));
+                        if (isNaN(parseFloat(input)) || input < 0) {
+                            console.log("Invald Salary");
+                            return false;
+                        }
+                        return true;
                     }
                 },
                 {
@@ -138,11 +160,27 @@ const init = async () => {
             const res = await inquirer.prompt([{
                 type: "input",
                 name: "firstName",
-                message: "what is the first name of the new employee"
+                message: "what is the first name of the new employee",
+                validate: async (input) => {
+                    if (input.trim().length > 30) {
+                        console.log("Employee First Name should not exceed 30 characters")
+                        return false;
+                        // Validate that the input length is 30 characters or less
+                    }
+                    return true;
+                }
             }, {
                 type: "input",
                 name: "lastName",
-                message: "what is the last name of the new employee"
+                message: "what is the last name of the new employee",
+                validate: async (input) => {
+                    if (input.trim().length > 30) {
+                        console.log("Employee Last Name should not exceed 30 characters")
+                        return false;
+                        // Validate that the input length is 30 characters or less
+                    }
+                    return true;
+                }
             }, {
                 type: "list",
                 name: "role",
@@ -155,8 +193,11 @@ const init = async () => {
                 choices: managerList,
             }
             ]);
+            // Finds an object in the roleList array where the name property matches res.role.
             const roleId = roleList.rows.find(role => role.name === res.role).id;
+            //Finds an object in the managerList array where the name property matches res.manager.
             const managerId = managerList.find(manager => manager.name === res.manager).id;
+            //Values will be inserted in the Employee Database table.
             const values = [res.firstName, res.lastName, roleId, managerId];
             const newData = await pool.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ($1,$2,$3,$4)RETURNING *`, values);
             console.log(`${res.firstName} ${res.lastName} is added`)
@@ -180,17 +221,22 @@ const init = async () => {
                     choices: roleList.rows,
                 },
             ]);
+            // Finds an object in the roleList array where the name property matches res.role.
             const roleId = roleList.rows.find(role => role.name === res.role).id;
             const employeeId = employeeList.rows.find(employee => employee.name === res.employee).id;
             const values = [roleId, employeeId];
+            //This sets the role_id column in the employee table to the value provided as the first element in the values array.
+            //Updates only affect the row where the id column matches the value provided as the second element in the values array.
             await pool.query(`UPDATE employee SET role_id = $1 WHERE id = $2`, values);
             console.log(`${res.employee} updated`);
         }
         else { running = false }
 
         // console.log(option);
-        process.exit();
+
     }
+
+    process.exit();
 }
 
 init();

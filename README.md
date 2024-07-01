@@ -3,10 +3,6 @@
 ## Description
 The Employee Record is a command-line application that uses Node.Js, Inquirer, and PostgreSQL. The application allows you to create, view, update and delete company departments, roles and employees.
 
-## Screenshot
-
-## Video Walkthrough
-
 ## User Story
 AS A business owner <br>
 I WANT to be able to view and manage the departments, roles, and employees in my company<br>
@@ -33,22 +29,28 @@ THEN I am prompted to select an employee to update and their new role and this i
 
 ## Usuage
 In order to run the program you must download the following.<br>
-Node.js <br>
-PostgreSQL <br>
+Node.js and PostgreSQL.
 
 ## Installation 
 1. Clone the repository to your local machine.
 2. Run `npm install` to install the required packages.
-3. Create a PostgreSQL database and update the `index.js` file with your database credentials.
+3. Create a PostgreSQL database and update the `.env` file with your database credentials.
 4. Run `node index` to start the application.
 5. Follow the prompts to interact with the application.
+
+## Video Walkthrough
+
+## Screenshot
+![Screenshot](./assets/Department_Table.png.png)
+![Screenshot](./assets/Employee_Table.png)
 
 ## Credits
 Class Lectures<br>
 Youtube<br>
 Classmates - Thinh Nguyen and Faiza Haque<br>
+AI Tools - CHATGPT and Copilot<br>
 
 ## Questions
 If you have any questions or need further clarification, please don't hesitate to reach out to me at
-[Email](mailto:marissa.melo91@yahoo.com) or [GitHub](https://github.com/marissamelo91)
+marissa.melo91@yahoo.com or https://github.com/marissamelo91
 
