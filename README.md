@@ -41,7 +41,7 @@ Node.js and PostgreSQL.
 ## Video Walkthrough
 
 ## Screenshot
-![Screenshot](./assets/Department_Table.png.png)
+![Screenshot](./assets/Department_Table.png)
 ![Screenshot](./assets/Employee_Table.png)
 
 ## Credits
